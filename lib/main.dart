@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   var userAnswer = "";
   var equal = false;
   var nextQuestion = "";
+  var bigger = false;
 
   final List<String> buttons = [
     'C',
@@ -67,24 +68,29 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  const SizedBox(height: 120),
-                  Container(
+                  const SizedBox(height: 60),
+                  AnimatedContainer(
                     padding: const EdgeInsets.all(20),
                     alignment: Alignment.centerRight,
-                    child: Text(userQuestion,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    duration: const Duration(seconds: 1),
+                    child: Text(
+                      userQuestion,
+                      style: TextStyle(
+                        fontSize: !bigger ? 40 : 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                  Container(
+                  AnimatedContainer(
                     padding: const EdgeInsets.all(20),
                     alignment: Alignment.centerRight,
+                    duration: const Duration(seconds: 1),
                     child: Text(
                       userAnswer,
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style: TextStyle(
+                        fontSize: bigger ? 40 : 20,
                         fontWeight: FontWeight.bold,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   )
@@ -110,13 +116,15 @@ class _HomePageState extends State<HomePage> {
                           } else if (index == 0) {
                             userQuestion = '';
                             userAnswer = '';
+                            nextQuestion = '';
                           } else if (index == buttons.length - 1) {
                             equalPressed();
-                          } else {
+                          } else if(userQuestion.length<=15) {
                             if (equal == true) {
                               userQuestion = nextQuestion;
                               equal = false;
                               userAnswer = "";
+                              bigger = false;
                             }
                             userQuestion += buttons[index];
                           }
@@ -168,5 +176,6 @@ class _HomePageState extends State<HomePage> {
     }
     nextQuestion = userAnswer;
     equal = true;
+    bigger = true;
   }
 }
